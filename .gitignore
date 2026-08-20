@@ -1,0 +1,25 @@
+# Build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# VS Code
+.vscode/
+
+# User-specific files
+*.userprefs
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+
+# Local configuration with passwords
+appsettings.json
+appsettings.Local.json
+appsettings.Development.json
