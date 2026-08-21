@@ -35,7 +35,7 @@ public class ProjectRepository : IRepository
         await connection.OpenAsync();
 
         await using var command= connection.CreateCommand();
-        command.CommandText= "Select tf.get_total_tasks();";
+        command.CommandText= "Select TF.get_total_tasks();";
 
         var result = await command.ExecuteScalarAsync();
         return Convert.ToInt32(result);
@@ -49,7 +49,7 @@ public class ProjectRepository : IRepository
         await connection.OpenAsync();
 
         await using var command= connection.CreateCommand();
-        command.CommandText="SELECT COUNT(*) FROM public.projects;";
+        command.CommandText="SELECT COUNT(*) FROM public.Projects;";
 
         var result= await command.ExecuteScalarAsync();
         return Convert.ToInt32(result);
@@ -63,9 +63,12 @@ public class ProjectRepository : IRepository
         await using var command= connection.CreateCommand();
         command.CommandText = """
         SELECT COUNT(*)
-        FROM tf.tasks t
-        INNER JOIN public.projects p
-        ON t."AppId" = p."ProjectId"; 
+        FROM "TF"."Tasks" t
+        INNER JOIN public."Projects" p
+            ON t."EntityId" = p."Id"::text
+        WHERE t."Entity" = 'PROJECT'
+        AND t."IsDeleted" = false
+        AND t."IsSystemTask" = false;
         """;
 
         var result= await command.ExecuteScalarAsync();

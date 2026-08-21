@@ -5,7 +5,7 @@ language plpgsql
 AS $$
 BEGIN
     RETURN (SELECT COUNT(*)::INTEGER
-        FROM public.projects);
+        FROM public."Projects");
 END;
 $$;
 
@@ -13,15 +13,18 @@ select count(*) from public.projects;
 
 //Total tasks belonging toprojects
 
-create or replace function tf.get_total_tasks()
+CREATE OR REPLACE FUNCTION "TF".get_total_tasks()
 returns INTEGER
-LANGUAGE plpgsql
+language plpgsql
 AS $$
 BEGIN
     RETURN (SELECT COUNT(*)::INTEGER
-        FROM tf.tasks t
-        INNER JOIN public.projects p
-            ON t."AppId" = p."ProjectId");
+        FROM "TF"."Tasks" t
+        INNER JOIN public."Projects" p
+            ON t."EntityId" = p."Id"::text
+        WHERE t."Entity" = 'PROJECT'
+          AND t."IsDeleted" = false
+          AND t."IsSystemTask" = false);
 END;
 $$;
 
